@@ -38,7 +38,15 @@ class GroupsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'group_name'    =>  'required|max:255'
+        ]);
+
+        $group = Group::create($request->all());
+
+        return (new GroupResource($group))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -49,7 +57,7 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        //
+        return new GroupResource(Group::findOrFail($id));
     }
 
     /**
@@ -72,7 +80,10 @@ class GroupsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $group = Group::findOrFail($id);
+        $group->update($request->all());
+
+        return response()->json(null, 204);
     }
 
     /**
@@ -83,6 +94,9 @@ class GroupsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $group = Group::findOrFail($id);
+        $group->delete();
+
+        return response()->json(null, 204);
     }
 }
