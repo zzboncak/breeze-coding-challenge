@@ -3,12 +3,15 @@ import ReactDOM from "react-dom";
 import { Container, Header } from "semantic-ui-react";
 
 import ResultsList from "./ResultsList";
+import FileInput from "./FileInput";
 
 const App = ({ children }) => (
   <Container style={{ margin: 20 }}>
     <Header as="h3"><span role="img" aria-label="logo">⛵️</span> Breeze Church Management </Header>
 
     {children}
+
+    <FileInput />
   </Container>
 );
 
