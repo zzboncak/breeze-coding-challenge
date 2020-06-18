@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Resources\GroupsCollection;
+use App\Http\Resources\GroupResource;
+use App\Models\Group;
+
 class GroupsController extends Controller
 {
     /**
@@ -13,7 +17,7 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        //
+        return new GroupsCollection(Group::all());
     }
 
     /**
