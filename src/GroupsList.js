@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { Table } from 'semantic-ui-react'
+import React, { Component } from 'react';
+import { Table } from 'semantic-ui-react';
 
-class ResultsList extends Component {
+class GroupsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,7 +12,7 @@ class ResultsList extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8000/api/people")
+        fetch("http://localhost:8000/api/groups")
           .then(response => response.json())
           .then(data => this.setState({ data: data.data }));
     }
@@ -59,27 +59,10 @@ class ResultsList extends Component {
                 <Table.Row>
                   <Table.HeaderCell
                     singleLine
-                    sorted={this.state.sortOnColumn === 'first_name' ? this.state.direction : null}
-                    onClick={() => this.handleSort('first_name')}
+                    sorted={this.state.sortOnColumn === 'group_name' ? this.state.direction : null}
+                    onClick={() => this.handleSort('group_name')}
                     >
                         First Name
-                    </Table.HeaderCell>
-                  <Table.HeaderCell
-                    sorted={this.state.sortOnColumn === 'last_name' ? this.state.direction : null}
-                    onClick={() => this.handleSort('last_name')}
-                    >
-                        Last Name
-                    </Table.HeaderCell>
-                  <Table.HeaderCell
-                    sorted={this.state.sortOnColumn === 'email_address' ? this.state.direction : null}
-                    onClick={() => this.handleSort('email_address')}
-                    >
-                        Email
-                    </Table.HeaderCell>
-                  <Table.HeaderCell
-                    sorted={this.state.sortOnColumn === 'status' ? this.state.direction : null}
-                    onClick={() => this.handleSort('status')}>
-                        Status
                     </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -87,13 +70,10 @@ class ResultsList extends Component {
               <Table.Body>
 
               {
-                  data.map((person, index) => {
+                  data.map((group, index) => {
                       return (
                           <Table.Row key={index}>
-                              <Table.Cell singleLine>{ person.first_name }</Table.Cell>
-                              <Table.Cell singleLine>{ person.last_name }</Table.Cell>
-                              <Table.Cell singleLine>{ person.email_address }</Table.Cell>
-                              <Table.Cell singleLine>{ person.status }</Table.Cell>
+                              <Table.Cell singleLine>{ group.group_name }</Table.Cell>
                           </Table.Row>
                       );
                     })
@@ -101,9 +81,8 @@ class ResultsList extends Component {
 
               </Table.Body>
             </Table>
-    );
+        )
+    }
 }
 
-}
-
-export default ResultsList
+export default GroupsList;

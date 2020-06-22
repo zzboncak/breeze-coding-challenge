@@ -3,25 +3,17 @@ import ReactDOM from "react-dom";
 import { Container, Header } from "semantic-ui-react";
 
 import CSVReader1 from './CSVReader';
+import GroupsCSVReader from "./GroupsCSVReader";
 
 import ResultsList from "./ResultsList";
-import FileInput from "./FileInput";
-
-// const App = ({ children }) => (
-//   <Container style={{ margin: 20 }}>
-//     <Header as="h3"><span role="img" aria-label="logo">⛵️</span> Breeze Church Management </Header>
-
-//     {children}
-//     <h3>Importing your people to Breeze is a, well... it's a breeze.</h3>
-//     <CSVReader1 />
-//   </Container>
-// );
+import GroupsList from "./GroupsList";
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             peopleToImport: [],
+            groupsToImport: [],
         };
     }
 
@@ -29,7 +21,12 @@ class App extends React.Component {
         this.setState({
             peopleToImport: peopleData
         });
-        console.log(this.state.peopleToImport.length);
+    }
+
+    updateGroupsToImport = (groupsData) => {
+        this.setState({
+            groupsToImport: groupsData
+        });
     }
 
     clearPeopleToImport = () => {
@@ -38,7 +35,13 @@ class App extends React.Component {
         });
     }
 
-    importPeople = (peopleData) => {
+    clearGroupsToImport = () => {
+        this.setState({
+            groupsToImport: []
+        });
+    }
+
+    importPeople = () => {
         // Fire this function when the user wants to send the data to the server
         console.log("Importing people...");
         if (this.state.peopleToImport.length !== 0) {
@@ -62,21 +65,66 @@ class App extends React.Component {
             })
 
             this.setState({
-                peopleToImport: [] // Empty the peopleToImport. The change in state will also refresh the app to load the new people from the database.
-            })
+                peopleToImport: [] // Empty the peopleToImport.
+            });
+
         } else {
             console.log('Currently no people to import');
         }
     }
 
+    importGroups = () => {
+        console.log("Importing groups...");
+        if (this.state.groupsToImport.length !== 0) {
+            this.state.groupsToImport.forEach(group => {
+                fetch("http://localhost:8000/api/groups", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Connection': 'keep-alive'
+                    },
+                    body: JSON.stringify(group.data)
+                })
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error ('Failed to import groups')
+                        }
+                        return res.json();
+                    })
+                    .then(data => console.log(data))
+                    .catch(err => console.log(err))
+            })
+
+            this.setState({
+                groupsToImport: [],
+            });
+
+        } else {
+            console.log('Currently no groups to import');
+        }
+    }
+
     validatePeopleFile = () => {
         if (this.state.peopleToImport.length === 0) {
-            return 'You need to attach a file to upload'
+            return 'You need to attach a file to upload';
         } else {
             let headers = Object.keys(this.state.peopleToImport[0].data);
             const requiredHeaders = ['first_name', 'last_name', 'email_address', 'status'];
 
-            console.log (headers);
+            for (let i = 0; i < requiredHeaders.length; i ++) {
+                if (!headers.includes(requiredHeaders[i])) {
+                    return `You are missing the header ${requiredHeaders[i]} in your CSV file. Please adjust your data and try again.`
+                }
+            }
+        }
+    }
+
+    validateGroupsFile = () => {
+        if (this.state.groupsToImport.length === 0) {
+            return 'You need to attach a file to upload';
+        } else {
+            let headers = Object.keys(this.state.groupsToImport[0].data);
+            const requiredHeaders = ['group_name'];
 
             for (let i = 0; i < requiredHeaders.length; i ++) {
                 if (!headers.includes(requiredHeaders[i])) {
@@ -89,12 +137,13 @@ class App extends React.Component {
     render() {
 
         let peopleErrorMessage = this.validatePeopleFile();
+        let groupsErrorMessage = this.validateGroupsFile();
 
         return (
             <Container style={{ margin: 20 }}>
                 <Header as="h3"><span role="img" aria-label="logo">⛵️</span> Breeze Church Management </Header>
 
-                <h3>Importing your people to Breeze is a, well... it's a breeze.</h3>
+                <h3>Importing your people to Breeze is, well... it's a breeze.</h3>
                 <CSVReader1
                     updatePeopleToImport={this.updatePeopleToImport}
                     clearPeopleToImport={this.clearPeopleToImport}
@@ -105,9 +154,24 @@ class App extends React.Component {
                 >
                     Import people
                 </button>
+                <div className="error-message">{peopleErrorMessage}</div>
+                <br />
+
+                <h3>Got groups?</h3>
+                <GroupsCSVReader
+                    updateGroupsToImport={this.updateGroupsToImport}
+                    clearGroupsToImport={this.clearGroupsToImport}
+                />
+                <button
+                    onClick={this.importGroups}
+                    disabled={groupsErrorMessage}
+                >
+                    Import groups
+                </button>
+                <div className="error-message">{groupsErrorMessage}</div>
 
                 {this.props.children}
-                <div className="error-message">{peopleErrorMessage}</div>
+
             </Container>
         )
     }
@@ -121,6 +185,7 @@ document.head.appendChild(styleLink);
 ReactDOM.render(
   <App>
     <ResultsList />
+    <GroupsList />
   </App>,
   document.getElementById("root")
 );
