@@ -94,7 +94,6 @@ class App extends React.Component {
             <Container style={{ margin: 20 }}>
                 <Header as="h3"><span role="img" aria-label="logo">⛵️</span> Breeze Church Management </Header>
 
-                {this.props.children}
                 <h3>Importing your people to Breeze is a, well... it's a breeze.</h3>
                 <CSVReader1
                     updatePeopleToImport={this.updatePeopleToImport}
@@ -106,6 +105,8 @@ class App extends React.Component {
                 >
                     Import people
                 </button>
+
+                {this.props.children}
                 <div className="error-message">{peopleErrorMessage}</div>
             </Container>
         )
