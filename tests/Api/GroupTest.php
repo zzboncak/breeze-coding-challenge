@@ -9,6 +9,8 @@ use App\Models\Group;
 
 class GroupTest extends TestCase
 {
+    use WithFaker;
+
     /**
      * A basic feature test example.
      *
@@ -34,10 +36,22 @@ class GroupTest extends TestCase
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    'group_name',
-                    'created_at',
-                    'updated_at'
+                    'group_name'
                 ]
             ]);
+    }
+
+    public function testAllGroupsRetrieved() {
+        $group = factory('App\Models\Group', 25)->create();
+
+        $response = $this->json('GET', '/api/groups');
+        $response
+            ->assertStatus(200)
+            ->assertJsonCount(25, 'data');
+    }
+
+    public function testNoGroupRetrieved() {
+        $response = $this->json('GET', '/api/groups/26');
+        $response->assertStatus(404);
     }
 }

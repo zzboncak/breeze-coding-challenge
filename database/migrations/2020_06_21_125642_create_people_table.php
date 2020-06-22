@@ -21,7 +21,7 @@ class CreatePeopleTable extends Migration
             $table->string('last_name');
             $table->string('email_address');
             $table->enum('status', ['active', 'archived']);
-            $table->unsignedBigInteger('group_id');
+            $table->unsignedBigInteger('group_id')->nullable();
             $table->foreign('group_id')->references('id')->on('groups');
             $table->timestamps();
         });
