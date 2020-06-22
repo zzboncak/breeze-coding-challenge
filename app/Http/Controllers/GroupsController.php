@@ -42,11 +42,21 @@ class GroupsController extends Controller
             'group_name'    =>  'required|max:255'
         ]);
 
-        $group = Group::create($request->all());
+        // First check if the group exists in the database
 
-        return (new GroupResource($group))
-            ->response()
-            ->setStatusCode(201);
+        $group = Group::find($request->id);
+
+        if ($group === null) { // If not, create a new group
+            $new_group = Group::create($request->all());
+
+            return (new GroupResource($new_group))
+                ->response()
+                ->setStatusCode(201);
+        } else { // If the group exists, update the record
+            $group->update($request->all());
+            return response()->json(null, 204);
+        }
+
     }
 
     /**

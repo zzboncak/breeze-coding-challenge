@@ -46,11 +46,21 @@ class PeopleController extends Controller
             'status'        => Rule::in(['active', 'archived'])
         ]);
 
-        $person = Person::create($request->all());
+        // First check if the person already exists in the database
 
-        return (new PersonResource($person))
-            ->response()
-            ->setStatusCode(201);
+        $person = Person::find($request->id);
+
+        if ($person === null) { // If not, create a new entry
+            $new_person = Person::create($request->all());
+
+            return (new PersonResource($new_person))
+                ->response()
+                ->setStatusCode(201);
+        } else { // If the person does exist, update the record
+            $person->update($request->all());
+            return response()->json(null, 204);
+        }
+
     }
 
     /**
