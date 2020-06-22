@@ -13,12 +13,16 @@ class CreatePeopleTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('people');
+
         Schema::create('people', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email_address');
             $table->enum('status', ['active', 'archived']);
+            $table->unsignedBigInteger('group_id');
+            $table->foreign('group_id')->references('id')->on('groups');
             $table->timestamps();
         });
     }
