@@ -40,9 +40,55 @@ class App extends React.Component {
 
     importPeople = (peopleData) => {
         // Fire this function when the user wants to send the data to the server
+        console.log("Importing people...");
+        if (this.state.peopleToImport.length !== 0) {
+            this.state.peopleToImport.forEach(person => {
+                fetch("http://localhost:8000/api/people", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Connection': 'keep-alive'
+                    },
+                    body: JSON.stringify(person.data)
+                })
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error ('Failed to import people')
+                        }
+                        return res.json();
+                    })
+                    .then(data => console.log(data))
+                    .catch(err => console.log(err))
+            })
+
+            this.setState({
+                peopleToImport: [] // Empty the peopleToImport. The change in state will also refresh the app to load the new people from the database.
+            })
+        } else {
+            console.log('Currently no people to import');
+        }
+    }
+
+    validatePeopleFile = () => {
+        if (this.state.peopleToImport.length === 0) {
+            return 'You need to attach a file to upload'
+        } else {
+            let headers = Object.keys(this.state.peopleToImport[0].data);
+            const requiredHeaders = ['first_name', 'last_name', 'email_address', 'status'];
+
+            console.log (headers);
+
+            for (let i = 0; i < requiredHeaders.length; i ++) {
+                if (!headers.includes(requiredHeaders[i])) {
+                    return `You are missing the header ${requiredHeaders[i]} in your CSV file. Please adjust your data and try again.`
+                }
+            }
+        }
     }
 
     render() {
+
+        let peopleErrorMessage = this.validatePeopleFile();
 
         return (
             <Container style={{ margin: 20 }}>
@@ -54,6 +100,13 @@ class App extends React.Component {
                     updatePeopleToImport={this.updatePeopleToImport}
                     clearPeopleToImport={this.clearPeopleToImport}
                 />
+                <button
+                    onClick={this.importPeople}
+                    disabled={peopleErrorMessage}
+                >
+                    Import people
+                </button>
+                <div className="error-message">{peopleErrorMessage}</div>
             </Container>
         )
     }

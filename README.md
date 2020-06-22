@@ -85,3 +85,8 @@ We love TDD! So we’d love to see tests for the API and ReactJS application. Wr
 We’re a fully remote team so communication is really important. Be sure to include any instructions needed for any of our team mates to run and test.
 
 Good luck and we'll get back to you once we review it!
+
+## Zack's notes
+
+- When installing the repository locally, be sure to also run `npm install` or `npm i` to install all the dependencies for the React App. The CSV file is parsed on the client side, and uses a library to do so.
+- If you're running into an issue with CORS, try installing an extension in your browser to allow CORS everywhere. There are a few out there on the marketplace, I used [this one](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf/related).
