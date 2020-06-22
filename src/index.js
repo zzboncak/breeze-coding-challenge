@@ -14,7 +14,15 @@ class App extends React.Component {
         this.state = {
             peopleToImport: [],
             groupsToImport: [],
+            people: [],
+            selectedGroup: null
         };
+    }
+
+    componentDidMount() {
+        fetch("http://localhost:8000/api/people")
+          .then(response => response.json())
+          .then(data => this.setState({ people: data.data }));
     }
 
     updatePeopleToImport = (peopleData) => {
@@ -26,6 +34,12 @@ class App extends React.Component {
     updateGroupsToImport = (groupsData) => {
         this.setState({
             groupsToImport: groupsData
+        });
+    }
+
+    updateSelectedGroup = (groupId) => {
+        this.setState({
+            selectedGroup: groupId
         });
     }
 
@@ -170,7 +184,15 @@ class App extends React.Component {
                 </button>
                 <div className="error-message">{groupsErrorMessage}</div>
 
-                {this.props.children}
+                <ResultsList
+                    people={this.state.people}
+                    selectedGroup={this.state.selectedGroup}
+                    />
+
+                <GroupsList
+                    people={this.state.people}
+                    updateSelectedGroup={this.updateSelectedGroup}
+                    /> {/**Passing in people here so the groups list has access to the group_id on each person */}
 
             </Container>
         )
@@ -183,9 +205,6 @@ styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css
 document.head.appendChild(styleLink);
 
 ReactDOM.render(
-  <App>
-    <ResultsList />
-    <GroupsList />
-  </App>,
+  <App />,
   document.getElementById("root")
 );

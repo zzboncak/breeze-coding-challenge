@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
+import './GroupsList.css';
 
 class GroupsList extends Component {
     constructor(props) {
@@ -54,7 +55,7 @@ class GroupsList extends Component {
         const data = this.state.data || [];
 
         return (
-            <Table sortable celled padded>
+            <Table sortable celled padded selectable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell
@@ -62,7 +63,7 @@ class GroupsList extends Component {
                     sorted={this.state.sortOnColumn === 'group_name' ? this.state.direction : null}
                     onClick={() => this.handleSort('group_name')}
                     >
-                        First Name
+                        Group Name
                     </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -73,7 +74,7 @@ class GroupsList extends Component {
                   data.map((group, index) => {
                       return (
                           <Table.Row key={index}>
-                              <Table.Cell singleLine>{ group.group_name }</Table.Cell>
+                              <Table.Cell className="group-name" onClick={() => this.props.updateSelectedGroup(group.id)}>{ group.group_name }</Table.Cell>
                           </Table.Row>
                       );
                     })

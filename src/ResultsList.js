@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Table } from 'semantic-ui-react'
+import './ResultsList.css';
 
 class ResultsList extends Component {
     constructor(props) {
@@ -7,19 +8,14 @@ class ResultsList extends Component {
         this.state = {
             data: [],
             sortOnColumn: null,
-            direction: null
+            direction: null,
+            isSorted: false
         };
-    }
-
-    componentDidMount() {
-        fetch("http://localhost:8000/api/people")
-          .then(response => response.json())
-          .then(data => this.setState({ data: data.data }));
     }
 
     handleSort = (clickedColumn) => {
         // implement sort functionality here
-        const currentData = this.state.data;
+        const currentData = this.props.people;
         const currentSourtOnColumn = this.state.sortOnColumn;
         const currentDirection = this.state.direction;
 
@@ -38,7 +34,8 @@ class ResultsList extends Component {
             this.setState({
                 data: sortedData,
                 sortOnColumn: clickedColumn,
-                direction: 'ascending'
+                direction: 'ascending',
+                isSorted: true
             })
 
             return;
@@ -51,7 +48,7 @@ class ResultsList extends Component {
     }
 
     render() {
-        const data = this.state.data || [];
+        const data = this.state.isSorted ? this.state.data : this.props.people; // It is initially unsorted, so it pulls the list from props. Once sorted, the data is stored in state.
 
         return (
             <Table sortable celled padded>
@@ -89,7 +86,10 @@ class ResultsList extends Component {
               {
                   data.map((person, index) => {
                       return (
-                          <Table.Row key={index}>
+                          <Table.Row
+                            key={index}
+                            className={person.group_id == this.props.selectedGroup && person.status === 'active' ? 'in-group' : ''}
+                            >
                               <Table.Cell singleLine>{ person.first_name }</Table.Cell>
                               <Table.Cell singleLine>{ person.last_name }</Table.Cell>
                               <Table.Cell singleLine>{ person.email_address }</Table.Cell>
