@@ -1,5 +1,4 @@
 import React from "react";
-// import ReactDOM from "react-dom";
 import { Container, Header } from "semantic-ui-react";
 
 import CSVReader1 from './CSVReader';

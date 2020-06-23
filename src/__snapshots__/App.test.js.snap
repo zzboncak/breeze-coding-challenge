@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match the snapshot with no files to upload 1`] = `
+<Container
+  style={
+    Object {
+      "margin": 20,
+    }
+  }
+>
+  <Header
+    as="h3"
+  >
+    <span
+      aria-label="logo"
+      role="img"
+    >
+      ⛵️
+    </span>
+     Breeze Church Management 
+  </Header>
+  <h3>
+    Importing your people to Breeze is, well... it's a breeze.
+  </h3>
+  <CSVReader1
+    clearPeopleToImport={[Function]}
+    updatePeopleToImport={[Function]}
+  />
+  <button
+    disabled="You need to attach a file to upload"
+    id="people-import-button"
+    onClick={[Function]}
+  >
+    Import people
+  </button>
+  <div
+    className="error-message"
+  >
+    You need to attach a file to upload
+  </div>
+  <br />
+  <h3>
+    Got groups?
+  </h3>
+  <GroupsCSVReader
+    clearGroupsToImport={[Function]}
+    updateGroupsToImport={[Function]}
+  />
+  <button
+    disabled="You need to attach a file to upload"
+    id="groups-import-button"
+    onClick={[Function]}
+  >
+    Import groups
+  </button>
+  <div
+    className="error-message"
+  >
+    You need to attach a file to upload
+  </div>
+  <ResultsList
+    people={Array []}
+    selectedGroup={null}
+  />
+  <GroupsList
+    people={Array []}
+    updateSelectedGroup={[Function]}
+  />
+   
+</Container>
+`;
