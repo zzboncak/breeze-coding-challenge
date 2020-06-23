@@ -129,6 +129,8 @@ export default class App extends React.Component {
                     return `You are missing the header ${requiredHeaders[i]} in your CSV file. Please adjust your data and try again.`
                 }
             }
+
+            return '';
         }
     }
 

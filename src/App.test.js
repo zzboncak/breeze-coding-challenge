@@ -25,3 +25,21 @@ it('buttons should be disabled without a file uploaded', () => {
     expect(button1.prop('disabled')).toEqual('You need to attach a file to upload');
     expect(button2.prop('disabled')).toEqual('You need to attach a file to upload');
 });
+
+it('button should stay disabled if bad data is present in file', () => {
+    const wrapper = shallow(<App />);
+
+    wrapper.setState({
+        peopleToImport: [{
+            data: {
+                "first_name": "Zachary",
+                "last_name": "Zboncak",
+                // missing required fields
+            }
+        }]
+    });
+
+    let button1 = wrapper.find('button').at(0); // select the button to import people
+
+    expect(button1.prop('disabled')).toEqual('You are missing the header email_address in your CSV file. Please adjust your data and try again.');
+})
