@@ -14,6 +14,7 @@ export default class App extends React.Component {
             peopleToImport: [],
             groupsToImport: [],
             people: [],
+            groups: [],
             selectedGroup: null
         };
     }
@@ -22,6 +23,10 @@ export default class App extends React.Component {
         fetch("http://localhost:8000/api/people")
           .then(response => response.json())
           .then(data => this.setState({ people: data.data }));
+
+        fetch("http://localhost:8000/api/groups")
+            .then(response => response.json())
+            .then(data => this.setState({ groups: data.data }));
     }
 
     updatePeopleToImport = (peopleData) => {
@@ -187,13 +192,16 @@ export default class App extends React.Component {
                 </button>
                 <div className="error-message">{groupsErrorMessage}</div>
 
+                <h2>People</h2>
                 <ResultsList
                     people={this.state.people}
                     selectedGroup={this.state.selectedGroup}
                     />
-
+                <h2>Groups</h2>
+                <p>To see which of your people are in a particular group, simply click on the group name below to see the active people highlighted in the list above.</p>
                 <GroupsList
                     people={this.state.people}
+                    groups={this.state.groups}
                     updateSelectedGroup={this.updateSelectedGroup}
                     /> {/**Passing in people here so the groups list has access to the group_id on each person */}
 

@@ -14,7 +14,6 @@ class ResultsList extends Component {
     }
 
     handleSort = (clickedColumn) => {
-        // implement sort functionality here
         const currentData = this.props.people;
         const currentSourtOnColumn = this.state.sortOnColumn;
         const currentDirection = this.state.direction;

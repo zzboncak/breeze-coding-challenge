@@ -8,19 +8,13 @@ class GroupsList extends Component {
         this.state = {
             data: [],
             sortOnColumn: null,
-            direction: null
+            direction: null,
+            isSorted: false
         };
     }
 
-    componentDidMount() {
-        fetch("http://localhost:8000/api/groups")
-          .then(response => response.json())
-          .then(data => this.setState({ data: data.data }));
-    }
-
     handleSort = (clickedColumn) => {
-        // implement sort functionality here
-        const currentData = this.state.data;
+        const currentData = this.props.groups;
         const currentSourtOnColumn = this.state.sortOnColumn;
         const currentDirection = this.state.direction;
 
@@ -39,7 +33,8 @@ class GroupsList extends Component {
             this.setState({
                 data: sortedData,
                 sortOnColumn: clickedColumn,
-                direction: 'ascending'
+                direction: 'ascending',
+                isSorted: true
             })
 
             return;
@@ -52,7 +47,7 @@ class GroupsList extends Component {
     }
 
     render() {
-        const data = this.state.data || [];
+        const data = this.state.isSorted ? this.state.data : this.props.groups;
 
         return (
             <Table sortable celled padded selectable>
