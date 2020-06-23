@@ -62,13 +62,17 @@ export default class App extends React.Component {
     importPeople = () => {
         let peopleToImport = this.state.peopleToImport;
 
+        let listOfPeople = peopleToImport.map(entry => entry.data);
+
+        let totalPeople = this.state.people.concat(listOfPeople);
+
         if (peopleToImport.length !== 0) {
             peopleToImport.forEach(person => {
                 fetch("http://localhost:8000/api/people", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // 'Connection': 'keep-alive'
+                        'Connection': 'keep-alive'
                     },
                     body: JSON.stringify(person.data)
                 })
@@ -83,7 +87,7 @@ export default class App extends React.Component {
             })
 
             this.setState({
-                people: peopleToImport.map(entry => entry.data) // Update the people in state to instantly refresh on the client. Data is stored in parallel on the database.
+                people: totalPeople // Update the people in state to instantly refresh on the client. Data is stored in parallel on the database.
             });
 
         } else {
@@ -92,9 +96,14 @@ export default class App extends React.Component {
     }
 
     importGroups = () => {
+        let groupsToImport = this.state.groupsToImport;
 
-        if (this.state.groupsToImport.length !== 0) {
-            this.state.groupsToImport.forEach(group => {
+        let listOfGroups = groupsToImport.map(entry => entry.data);
+
+        let totalGroups = this.state.groups.concat(listOfGroups);
+
+        if (groupsToImport.length !== 0) {
+            groupsToImport.forEach(group => {
                 fetch("http://localhost:8000/api/groups", {
                     method: 'POST',
                     headers: {
@@ -114,7 +123,7 @@ export default class App extends React.Component {
             })
 
             this.setState({
-                groupsToImport: [],
+                groups: totalGroups
             });
 
         } else {
