@@ -51,6 +51,7 @@ exports[`<ResultsList /> should match the snapshot 1`] = `
     <TableRow
       as="tr"
       cellAs="td"
+      className="in-group"
       key="0"
     >
       <TableCell

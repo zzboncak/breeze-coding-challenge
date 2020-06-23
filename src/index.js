@@ -8,196 +8,200 @@ import GroupsCSVReader from "./GroupsCSVReader";
 import ResultsList from "./ResultsList";
 import GroupsList from "./GroupsList";
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            peopleToImport: [],
-            groupsToImport: [],
-            people: [],
-            selectedGroup: null
-        };
-    }
+import App from "./App";
 
-    componentDidMount() {
-        fetch("http://localhost:8000/api/people")
-          .then(response => response.json())
-          .then(data => this.setState({ people: data.data }));
-    }
+// export default class App extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             peopleToImport: [],
+//             groupsToImport: [],
+//             people: [],
+//             selectedGroup: null
+//         };
+//     }
 
-    updatePeopleToImport = (peopleData) => {
-        this.setState({
-            peopleToImport: peopleData
-        });
-    }
+//     componentDidMount() {
+//         fetch("http://localhost:8000/api/people")
+//           .then(response => response.json())
+//           .then(data => this.setState({ people: data.data }));
+//     }
 
-    updateGroupsToImport = (groupsData) => {
-        this.setState({
-            groupsToImport: groupsData
-        });
-    }
+//     updatePeopleToImport = (peopleData) => {
+//         this.setState({
+//             peopleToImport: peopleData
+//         });
+//     }
 
-    updateSelectedGroup = (groupId) => {
-        this.setState({
-            selectedGroup: groupId
-        });
-    }
+//     updateGroupsToImport = (groupsData) => {
+//         this.setState({
+//             groupsToImport: groupsData
+//         });
+//     }
 
-    clearPeopleToImport = () => {
-        this.setState({
-            peopleToImport: []
-        });
-    }
+//     updateSelectedGroup = (groupId) => {
+//         this.setState({
+//             selectedGroup: groupId
+//         });
+//     }
 
-    clearGroupsToImport = () => {
-        this.setState({
-            groupsToImport: []
-        });
-    }
+//     clearPeopleToImport = () => {
+//         this.setState({
+//             peopleToImport: []
+//         });
+//     }
 
-    importPeople = () => {
-        // Fire this function when the user wants to send the data to the server
-        console.log("Importing people...");
-        if (this.state.peopleToImport.length !== 0) {
-            this.state.peopleToImport.forEach(person => {
-                fetch("http://localhost:8000/api/people", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Connection': 'keep-alive'
-                    },
-                    body: JSON.stringify(person.data)
-                })
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error ('Failed to import people')
-                        }
-                        return res.json();
-                    })
-                    .then(data => console.log(data))
-                    .catch(err => console.log(err))
-            })
+//     clearGroupsToImport = () => {
+//         this.setState({
+//             groupsToImport: []
+//         });
+//     }
 
-            this.setState({
-                peopleToImport: [] // Empty the peopleToImport.
-            });
+//     importPeople = () => {
+//         let peopleToImport = this.state.peopleToImport;
 
-        } else {
-            console.log('Currently no people to import');
-        }
-    }
+//         if (peopleToImport.length !== 0) {
+//             peopleToImport.forEach(person => {
+//                 fetch("http://localhost:8000/api/people", {
+//                     method: 'POST',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         // 'Connection': 'keep-alive'
+//                     },
+//                     body: JSON.stringify(person.data)
+//                 })
+//                     .then(res => {
+//                         if (!res.ok) {
+//                             throw new Error ('Failed to import people')
+//                         }
+//                         return res.json();
+//                     })
+//                     .then(data => console.log(data))
+//                     .catch(err => console.log(err))
+//             })
 
-    importGroups = () => {
-        console.log("Importing groups...");
-        if (this.state.groupsToImport.length !== 0) {
-            this.state.groupsToImport.forEach(group => {
-                fetch("http://localhost:8000/api/groups", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Connection': 'keep-alive'
-                    },
-                    body: JSON.stringify(group.data)
-                })
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error ('Failed to import groups')
-                        }
-                        return res.json();
-                    })
-                    .then(data => console.log(data))
-                    .catch(err => console.log(err))
-            })
+//             this.setState({
+//                 people: peopleToImport.map(entry => entry.data) // Update the people in state to instantly refresh on the client. Data is stored in parallel on the database.
+//             });
 
-            this.setState({
-                groupsToImport: [],
-            });
+//         } else {
+//             console.log('Currently no people to import');
+//         }
+//     }
 
-        } else {
-            console.log('Currently no groups to import');
-        }
-    }
+//     importGroups = () => {
 
-    validatePeopleFile = () => {
-        if (this.state.peopleToImport.length === 0) {
-            return 'You need to attach a file to upload';
-        } else {
-            let headers = Object.keys(this.state.peopleToImport[0].data);
-            const requiredHeaders = ['first_name', 'last_name', 'email_address', 'status'];
+//         if (this.state.groupsToImport.length !== 0) {
+//             this.state.groupsToImport.forEach(group => {
+//                 fetch("http://localhost:8000/api/groups", {
+//                     method: 'POST',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         // 'Connection': 'keep-alive'
+//                     },
+//                     body: JSON.stringify(group.data)
+//                 })
+//                     .then(res => {
+//                         if (!res.ok) {
+//                             throw new Error ('Failed to import groups')
+//                         }
+//                         return res.json();
+//                     })
+//                     .then(data => console.log(data))
+//                     .catch(err => console.log(err))
+//             })
 
-            for (let i = 0; i < requiredHeaders.length; i ++) {
-                if (!headers.includes(requiredHeaders[i])) {
-                    return `You are missing the header ${requiredHeaders[i]} in your CSV file. Please adjust your data and try again.`
-                }
-            }
-        }
-    }
+//             this.setState({
+//                 groupsToImport: [],
+//             });
 
-    validateGroupsFile = () => {
-        if (this.state.groupsToImport.length === 0) {
-            return 'You need to attach a file to upload';
-        } else {
-            let headers = Object.keys(this.state.groupsToImport[0].data);
-            const requiredHeaders = ['group_name'];
+//         } else {
+//             console.log('Currently no groups to import');
+//         }
+//     }
 
-            for (let i = 0; i < requiredHeaders.length; i ++) {
-                if (!headers.includes(requiredHeaders[i])) {
-                    return `You are missing the header ${requiredHeaders[i]} in your CSV file. Please adjust your data and try again.`
-                }
-            }
-        }
-    }
+//     validatePeopleFile = () => {
+//         if (this.state.peopleToImport.length === 0) {
+//             return 'You need to attach a file to upload';
+//         } else {
+//             let headers = Object.keys(this.state.peopleToImport[0].data);
+//             const requiredHeaders = ['first_name', 'last_name', 'email_address', 'status'];
 
-    render() {
+//             for (let i = 0; i < requiredHeaders.length; i ++) {
+//                 if (!headers.includes(requiredHeaders[i])) {
+//                     return `You are missing the header ${requiredHeaders[i]} in your CSV file. Please adjust your data and try again.`
+//                 }
+//             }
+//         }
+//     }
 
-        let peopleErrorMessage = this.validatePeopleFile();
-        let groupsErrorMessage = this.validateGroupsFile();
+//     validateGroupsFile = () => {
+//         if (this.state.groupsToImport.length === 0) {
+//             return 'You need to attach a file to upload';
+//         } else {
+//             let headers = Object.keys(this.state.groupsToImport[0].data);
+//             const requiredHeaders = ['group_name'];
 
-        return (
-            <Container style={{ margin: 20 }}>
-                <Header as="h3"><span role="img" aria-label="logo">⛵️</span> Breeze Church Management </Header>
+//             for (let i = 0; i < requiredHeaders.length; i ++) {
+//                 if (!headers.includes(requiredHeaders[i])) {
+//                     return `You are missing the header ${requiredHeaders[i]} in your CSV file. Please adjust your data and try again.`
+//                 }
+//             }
+//         }
+//     }
 
-                <h3>Importing your people to Breeze is, well... it's a breeze.</h3>
-                <CSVReader1
-                    updatePeopleToImport={this.updatePeopleToImport}
-                    clearPeopleToImport={this.clearPeopleToImport}
-                />
-                <button
-                    onClick={this.importPeople}
-                    disabled={peopleErrorMessage}
-                >
-                    Import people
-                </button>
-                <div className="error-message">{peopleErrorMessage}</div>
-                <br />
+//     render() {
 
-                <h3>Got groups?</h3>
-                <GroupsCSVReader
-                    updateGroupsToImport={this.updateGroupsToImport}
-                    clearGroupsToImport={this.clearGroupsToImport}
-                />
-                <button
-                    onClick={this.importGroups}
-                    disabled={groupsErrorMessage}
-                >
-                    Import groups
-                </button>
-                <div className="error-message">{groupsErrorMessage}</div>
+//         let peopleErrorMessage = this.validatePeopleFile();
+//         let groupsErrorMessage = this.validateGroupsFile();
 
-                <ResultsList
-                    people={this.state.people}
-                    selectedGroup={this.state.selectedGroup}
-                    />
+//         return (
+//             <Container style={{ margin: 20 }}>
+//                 <Header as="h3"><span role="img" aria-label="logo">⛵️</span> Breeze Church Management </Header>
 
-                <GroupsList
-                    people={this.state.people}
-                    updateSelectedGroup={this.updateSelectedGroup}
-                    /> {/**Passing in people here so the groups list has access to the group_id on each person */}
+//                 <h3>Importing your people to Breeze is, well... it's a breeze.</h3>
+//                 <CSVReader1
+//                     updatePeopleToImport={this.updatePeopleToImport}
+//                     clearPeopleToImport={this.clearPeopleToImport}
+//                 />
+//                 <button
+//                     onClick={this.importPeople}
+//                     disabled={peopleErrorMessage}
+//                     id='people-import-button'
+//                 >
+//                     Import people
+//                 </button>
+//                 <div className="error-message">{peopleErrorMessage}</div>
+//                 <br />
 
-            </Container>
-        )
-    }
-}
+//                 <h3>Got groups?</h3>
+//                 <GroupsCSVReader
+//                     updateGroupsToImport={this.updateGroupsToImport}
+//                     clearGroupsToImport={this.clearGroupsToImport}
+//                 />
+//                 <button
+//                     onClick={this.importGroups}
+//                     disabled={groupsErrorMessage}
+//                     id='groups-import-button'
+//                 >
+//                     Import groups
+//                 </button>
+//                 <div className="error-message">{groupsErrorMessage}</div>
+
+//                 <ResultsList
+//                     people={this.state.people}
+//                     selectedGroup={this.state.selectedGroup}
+//                     />
+
+//                 <GroupsList
+//                     people={this.state.people}
+//                     updateSelectedGroup={this.updateSelectedGroup}
+//                     /> {/**Passing in people here so the groups list has access to the group_id on each person */}
+
+//             </Container>
+//         )
+//     }
+// }
 
 const styleLink = document.createElement("link");
 styleLink.rel = "stylesheet";
