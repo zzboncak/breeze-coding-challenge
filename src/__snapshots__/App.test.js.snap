@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match the snapshot with no files to upload 1`] = `
+exports[`<App /> should match the snapshot with no files to upload 1`] = `
 <Container
   style={
     Object {
