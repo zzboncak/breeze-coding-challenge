@@ -54,4 +54,41 @@ class GroupTest extends TestCase
         $response = $this->json('GET', '/api/groups/26');
         $response->assertStatus(404);
     }
+
+    public function testGroupUpdated() {
+        $group = factory('App\Models\Group')->create();
+
+        $updatedGroupName = $this->faker->word();
+        $response = $this->json('PUT', '/api/groups/' . $group->id, [
+            'group_name' => $updatedGroupName
+        ]);
+        $response->assertStatus(204);
+
+        $updatedGroup = Group::find($group->id);
+        $this->assertEquals($updatedGroupName, $updatedGroup->group_name);
+    }
+
+    public function testGroupDeleted() {
+        $group = factory('App\Models\Group')->create();
+
+        $deleteResponse = $this->json('DELETE', '/api/groups/' . $group->id);
+        $deleteResponse->assertStatus(204);
+
+        $response = $this->json('GET', '/api/groups/' . $group->id);
+        $response->assertStatus(404);
+    }
+
+    public function testGroupUpdatedIfExists() {
+        $group = factory('App\Models\Group')->create();
+
+        $updatedGroupName = $this->faker->word();
+        $response = $this->json('POST', '/api/groups/', [
+            'group_name' => $updatedGroupName,
+            'id' => $group->id
+        ]);
+        $response->assertStatus(204);
+
+        $updatedGroup = Group::find($group->id);
+        $this->assertEquals($updatedGroupName, $updatedGroup->group_name);
+    }
 }

@@ -89,4 +89,21 @@ class PeopleControllerTest extends TestCase
         $response->assertStatus(404);
 
     }
+
+    public function testPersonUpdatedIfExists() {
+        $person = factory('App\Models\Person')->create();
+
+        $updatedFirstName = $this->faker->firstName();
+        $response = $this->json('POST', '/api/people/', [
+            'first_name' => $updatedFirstName,
+            'last_name' => $person->last_name,
+            'email_address' => $person->email_address,
+            'status' => $person->status,
+            'id' => $person->id
+        ]);
+        $response->assertStatus(204);
+
+        $updatedPerson = Person::find($person->id);
+        $this->assertEquals($updatedFirstName, $updatedPerson->first_name);
+    }
 }
