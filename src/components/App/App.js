@@ -1,11 +1,11 @@
 import React from "react";
 import { Container, Header } from "semantic-ui-react";
 
-import CSVReader1 from './CSVReader';
-import GroupsCSVReader from "./GroupsCSVReader";
+import CSVReader1 from '../PeopleCSVReader/CSVReader';
+import GroupsCSVReader from "../GroupsCSVReader/GroupsCSVReader";
 
-import ResultsList from "./ResultsList";
-import GroupsList from "./GroupsList";
+import ResultsList from "../ResultsList/ResultsList";
+import GroupsList from "../GroupsList/GroupsList";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -15,7 +15,8 @@ export default class App extends React.Component {
             groupsToImport: [],
             people: [],
             groups: [],
-            selectedGroup: null
+            selectedGroup: null,
+            hadErrorUploading: false
         };
     }
 

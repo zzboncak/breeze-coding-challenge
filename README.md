@@ -88,5 +88,15 @@ Good luck and we'll get back to you once we review it!
 
 ## Zack's notes
 
-- When installing the repository locally, be sure to also run `npm install` or `npm i` to install all the dependencies for the React App. The CSV file is parsed on the client side, and uses a library to do so.
+- When installing the repository locally, in addition to following the above commands in the **Exercise Setup Help** section be sure to also run `npm install` or `npm i` to install all the dependencies for the React App. The CSV file is parsed on the client side, and uses a library to do so.
 - If you're running into an issue with CORS, try installing an extension in your browser to allow CORS everywhere. There are a few out there on the marketplace, I used [this one](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf/related).
+- Be sure to run your MySQL server and have an updated .env file. Create your database before trying to run your migrations. Here is an example of credentials for the .env file, but use whatever MySQL credentials you have set up:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=breeze
+DB_USERNAME=root
+DB_PASSWORD=
+```
+Whatever you put for the database name, be sure to create that database. I used the MySQL CLI. An example command once connected would be `CREATE DATABASE breeze;`, or whichever database name you prefer.

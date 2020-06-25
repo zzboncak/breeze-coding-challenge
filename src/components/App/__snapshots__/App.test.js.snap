@@ -58,11 +58,21 @@ exports[`<App /> should match the snapshot with no files to upload 1`] = `
   >
     You need to attach a file to upload
   </div>
+  <h2>
+    People
+  </h2>
   <ResultsList
     people={Array []}
     selectedGroup={null}
   />
+  <h2>
+    Groups
+  </h2>
+  <p>
+    To see which of your people are in a particular group, simply click on the group name below to see the active people highlighted in the list above.
+  </p>
   <GroupsList
+    groups={Array []}
     people={Array []}
     updateSelectedGroup={[Function]}
   />
